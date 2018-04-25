@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html style="height:100%">
+    
+
+<head>
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title>Collaboration</title>
+    <script src="/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="socket.io.js"></script>
+    <script src="/angularjs/angular.min.js"></script>
+    <script src="/angularjs/angular-route.min.js"></script>
+    <script src="loginController.js"></script>
+    <script src="/uibootstrap/uibs.js"></script>
+</head>
+<style>
+    .chatmsg {
+        border:1px solid black ;
+        border-radius:7px ;
+        padding-left:3px ;
+        word-wrap: break-word;
+    }
+</style>
+<body ng-app="chatApp" ng-controller="chatController" style="height:100%">
+    <div class="container-fluid" style="padding:0px;height:100%">
+        <div class="row" style="height:100%">
+            <div class="col-md-3" style="height:100% ; background-color:white ; padding:0px ;" >
+            <div class="list-group">
+                <div class="form-group has-feedback" style="margin-bottom:0px">
+    <input type="text" class="form-control" placeholder="Search for people" ng-model="searchedUser" uib-typeahead="user.value for user in onUserSearch($viewValue)" typeahead-loading="loadingUsers" typeahead-no-results="noResults" typeahead-min-length = "4" typeahead-on-select="startNewConversation($item,$model,$label,$event)"/>
+     <div ng-show="noResults && searchedUser.length > 0">
+      No Results Found <i class="glyphicon glyphicon-remove" ng-click="noResults=false ; searchedUser=''"></i> 
+    </div>
+    <i class="glyphicon glyphicon-search form-control-feedback"></i>
+</div>
+                   <a ng-repeat="c in conversations" href="#" class="list-group-item" ng-class="{'active':c.selected}" ng-click="onClickOfConversations($index)">
+                    {{c.name}}
+                </a>     
+            </div>
+                
+            </div>
+            
+            <div class="col-md-9" style="height:100%">
+               <div style="height:90%;overflow-y:auto;overflow-x:hidden;">
+                   <div ng-repeat="chat in conversations[cscId].messages track by $index">
+                       <div class="row">
+                           <div ng-class="{'col-md-offset-6':chat.from == userId}" class="col-md-5">
+                               <p class="chatmsg">{{chat.text}}</p>
+                           </div>
+                           
+                       </div>
+                   </div>
+               </div>
+                <div class="row">
+                   <div class="col-md-10">
+                       <input class="form-control" ng-model="msg"/>
+                   </div>
+                   <div class="col-md-2">
+                    <button class="btn btn-info" ng-click="onClickOfSend(msg)" style="float:left">Send <span class="glyphicon glyphicon-send"></span></button>   
+                   </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
